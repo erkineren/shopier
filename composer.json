@@ -1,0 +1,31 @@
+{
+  "name": "erkineren/shopier",
+  "type": "library",
+  "description": "Shopier Api Sdk",
+  "keywords": [
+    "shopier",
+    "api",
+    "payment gateway"
+  ],
+  "license": "GPL-3.0+",
+  "authors": [
+    {
+      "name": "Erkin Eren",
+      "email": "eren@erkin.net",
+      "homepage": "https://erkin.net"
+    }
+  ],
+  "config": {
+    "autoloader-suffix": "Shopier",
+    "optimize-autoloader": true
+  },
+  "minimum-stability": "stable",
+  "autoload": {
+    "psr-4": {
+      "Shopier\\": "src/"
+    }
+  },
+  "require": {
+    "ext-json": "*"
+  }
+}
