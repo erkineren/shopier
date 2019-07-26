@@ -140,7 +140,8 @@ $isValidPaymentResponse = $shopier->verifyResponse($response_data);
 ```
 
 ```
-// $response_data dizisi aşağıdaki şekildedir. Ödeme sonrasında Shopier tarafından sizin return_url'nize post edilen veridir.
+// $response_data dizisi aşağıdaki şekildedir
+// Ödeme sonrasında Shopier tarafından sizin return_url'nize post edilen veridir.
 Array
 (
     [platform_order_id] => 20002
