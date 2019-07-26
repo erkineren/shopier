@@ -138,6 +138,21 @@ içerisine kendi yönlendirme uygulamanızı yazabilirsiniz.
 ```php
 $isValidPaymentResponse = $shopier->verifyResponse($response_data);
 ```
+
+```
+// $response_data dizisi aşağıdaki şekildedir. Ödeme sonrasında Shopier tarafından sizin return_url'nize post edilen veridir.
+Array
+(
+    [platform_order_id] => 20002
+    [API_key] => *******************************
+    [status] => success
+    [installment] => 0
+    [payment_id] => 446549593
+    [random_nr] => 528061
+    [signature] => +e1klzFG7ZABS16xnHcZ8peqbvSZD3Pv9NU4pWiw0qE=
+)
+```
+
 # Parameter Initialize Methods (Parametre Ekleme Yöntemleri)
 ``ShopierParams``, ``Buyer`` ve ``Address`` sınıfları ``BaseModel`` sınıfında türemektedir.
 ``ShippingAddress`` ve ``BillingAddress`` sınıfları ``Address`` sınıfından türemektedir.
