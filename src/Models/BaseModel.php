@@ -77,7 +77,7 @@ abstract class BaseModel
      */
     public function toArray()
     {
-        return call_user_func('get_object_vars', $this);
+        return get_object_vars($this);
     }
 
     /**

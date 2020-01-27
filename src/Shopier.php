@@ -221,12 +221,13 @@ END;
      * @param AbstractRenderer $renderer
      * @param bool $return
      * @param bool $die
+     * @return string
      * @throws RequiredParameterException
      */
     public function goWith(AbstractRenderer $renderer, $return = false, $die = false)
     {
         $renderer->render();
-        $renderer->output($return, $die);
+        return $renderer->output($return, $die);
     }
 
 }

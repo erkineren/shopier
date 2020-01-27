@@ -10,7 +10,6 @@ class ShopierResponse extends BaseModel
 {
     protected static $requirement = [
         'platform_order_id' => true,
-        'API_key' => true,
         'status' => true,
         'installment' => true,
         'payment_id' => true,
@@ -132,7 +131,6 @@ class ShopierResponse extends BaseModel
      * <code>
      * [
      * 'platform_order_id' => '10002',
-     * 'API_key' => '************',
      * 'status' => 'success',
      * 'installment' => '0',
      * 'payment_id' => '954344654',
