@@ -1,5 +1,7 @@
 <?php
 
+use Shopier\Enums\ProductType;
+use Shopier\Enums\WebsiteIndex;
 use Shopier\Exceptions\NotRendererClassException;
 use Shopier\Exceptions\RendererClassNotFoundException;
 use Shopier\Exceptions\RequiredParameterException;
@@ -7,15 +9,11 @@ use Shopier\Models\Address;
 use Shopier\Models\Buyer;
 use Shopier\Renderers\AutoSubmitFormRenderer;
 use Shopier\Renderers\ButtonRenderer;
-use Shopier\Enums\ProductType;
 use Shopier\Shopier;
 
-require 'vendor/autoload.php';
+require_once __DIR__ . '/bootstrap.php';
 
-define('API_KEY', '***');
-define('API_SECRET', '***');
-
-$shopier = new Shopier(API_KEY, API_SECRET);
+$shopier = new Shopier(getenv('SHOPIER_API_KEY'), getenv('SHOPIER_API_SECRET'));
 
 // Satın alan kişi bilgileri
 $buyer = new Buyer([
@@ -27,7 +25,7 @@ $buyer = new Buyer([
 ]);
 
 // Fatura ve kargo adresi birlikte tanımlama
-// Ayrı ayrı da tanımlabilir
+// Ayrı ayrı da tanımlanabilir
 $address = new Address([
     'address' => 'Kızılay Mh.',
     'city' => 'Ankara',
@@ -35,8 +33,11 @@ $address = new Address([
     'postcode' => '06100',
 ]);
 
-// shopier parametlerini al
+// shopier parametrelerini al
 $params = $shopier->getParams();
+
+// Geri dönüş sitesini ayarla
+$params->setWebsiteIndex(WebsiteIndex::SITE_1);
 
 // Satın alan kişi bilgisini ekle
 $params->setBuyer($buyer);
@@ -44,25 +45,26 @@ $params->setBuyer($buyer);
 // Fatura ve kargo adresini aynı şekilde ekle
 $params->setAddress($address);
 
-// Sipariş numarsı ve sipariş tutarını ekle
-$shopier->setOrderData('52003', '1.0');
+// Sipariş numarası ve sipariş tutarını ekle
+$params->setOrderData('52003', '1.0');
 
 // Sipariş edilen ürünü ekle
-$shopier->setProductData('Test Product', ProductType::DOWNLOADABLE_VIRTUAL);
+$params->setProductData('Test Product', ProductType::DOWNLOADABLE_VIRTUAL);
+
 
 try {
 
 
     /**
-     * Otomarik ödeme sayfasına yönlendiren renderer
+     * Otomatik ödeme sayfasına yönlendiren renderer
      *
      * @var AutoSubmitFormRenderer $renderer
      */
 //    $renderer = $shopier->createRenderer(AutoSubmitFormRenderer::class);
-
+//    $shopier->goWith($renderer);
 
     /**
-     * Shopier İle Güvenli Öde şeklinde butona tıklanınca ödeme sayfasına yönlendirenn renderer
+     * Shopier İle Güvenli Öde şeklinde butona tıklanınca ödeme sayfasına yönlendiren renderer
      *
      * @var ButtonRenderer $renderer
      */
@@ -75,9 +77,10 @@ try {
     $shopier->goWith($renderer);
 
 } catch (RequiredParameterException $e) {
-    // Zorunlu parametlerden bir ve daha fazlası eksik
+    // Zorunlu parametrelerden bir ve daha fazlası eksik
 } catch (NotRendererClassException $e) {
-    // $shopier->createRenderer(...) metodunda verilen class adı AbstracRenderer sınıfından türetilmemiş !
+    // $shopier->createRenderer(...) metodunda verilen class adı AbstractRenderer sınıfından türetilmemiş !
 } catch (RendererClassNotFoundException $e) {
     // $shopier->createRenderer(...) metodunda verilen class bulunamadı !
 }
+

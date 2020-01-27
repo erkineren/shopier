@@ -21,6 +21,8 @@ abstract class BaseModel
 
     /**
      * @param array $properties
+     * @param bool $ignoreNull
+     * @return static
      */
     public function fillValues(array $properties, $ignoreNull = true)
     {
@@ -30,6 +32,7 @@ abstract class BaseModel
                 $this->{$property} = $value;
             }
         }
+        return $this;
     }
 
     /**
@@ -46,13 +49,7 @@ abstract class BaseModel
      */
     public static function fromArray(array $properties)
     {
-        $obj = new static();
-        foreach ($properties as $property => $value) {
-            if (property_exists($obj, $property)) {
-                $obj->{$property} = $value;
-            }
-        }
-        return $obj;
+        return new static($properties);
     }
 
     /**

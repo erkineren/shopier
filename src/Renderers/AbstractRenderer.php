@@ -38,10 +38,11 @@ abstract class AbstractRenderer
 
     public abstract function render();
 
-    public function output($return = false, $die = false)
+    public function output($return = false, $exit = false)
     {
-        if ($return) return $this->data;
-        echo $this->data;
-        if ($die) die;
+        if (!$return)
+            echo $this->data;
+        if ($exit) exit();
+        return $this->data;
     }
 }

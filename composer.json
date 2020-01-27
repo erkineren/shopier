@@ -1,11 +1,13 @@
 {
   "name": "erkineren/shopier",
   "type": "library",
-  "description": "Shopier Api Sdk",
+  "description": "Shopier Entegrasyon - Php Api Sdk",
   "keywords": [
     "shopier",
     "api",
-    "payment gateway"
+    "payment gateway",
+    "ödeme alma entegrasyonu",
+    "entegrasyon"
   ],
   "license": "GPL-3.0+",
   "authors": [
@@ -16,6 +18,9 @@
     }
   ],
   "config": {
+    "platform": {
+      "php": "5.6"
+    },
     "autoloader-suffix": "Shopier",
     "optimize-autoloader": true
   },
@@ -27,5 +32,8 @@
   },
   "require": {
     "ext-json": "*"
+  },
+  "require-dev": {
+    "vlucas/phpdotenv": "^4.1"
   }
 }

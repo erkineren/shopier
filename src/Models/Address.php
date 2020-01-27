@@ -21,11 +21,13 @@ class Address extends BaseModel
 
     /** @var string */
     public $address;
+
     /** @var string */
     public $city;
+
     /** @var string */
     public $country;
+
     /** @var string */
     public $postcode;
-
 }

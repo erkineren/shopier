@@ -18,6 +18,12 @@ composer require erkineren/shopier
 # Usage (Kullanım)
 
 ```php
+<?php
+
+// example/index.php
+
+use Shopier\Enums\ProductType;
+use Shopier\Enums\WebsiteIndex;
 use Shopier\Exceptions\NotRendererClassException;
 use Shopier\Exceptions\RendererClassNotFoundException;
 use Shopier\Exceptions\RequiredParameterException;
@@ -25,15 +31,11 @@ use Shopier\Models\Address;
 use Shopier\Models\Buyer;
 use Shopier\Renderers\AutoSubmitFormRenderer;
 use Shopier\Renderers\ButtonRenderer;
-use Shopier\Enums\ProductType;
 use Shopier\Shopier;
 
-require 'vendor/autoload.php';
+require_once __DIR__ . '/bootstrap.php';
 
-define('API_KEY', '***************');
-define('API_SECRET', '************');
-
-$shopier = new Shopier(API_KEY, API_SECRET);
+$shopier = new Shopier(getenv('SHOPIER_API_KEY'), getenv('SHOPIER_API_SECRET'));
 
 // Satın alan kişi bilgileri
 $buyer = new Buyer([
@@ -45,7 +47,7 @@ $buyer = new Buyer([
 ]);
 
 // Fatura ve kargo adresi birlikte tanımlama
-// Ayrı ayrı da tanımlabilir
+// Ayrı ayrı da tanımlanabilir
 $address = new Address([
     'address' => 'Kızılay Mh.',
     'city' => 'Ankara',
@@ -53,8 +55,11 @@ $address = new Address([
     'postcode' => '06100',
 ]);
 
-// shopier parametlerini al
+// shopier parametrelerini al
 $params = $shopier->getParams();
+
+// Geri dönüş sitesini ayarla
+$params->setWebsiteIndex(WebsiteIndex::SITE_1);
 
 // Satın alan kişi bilgisini ekle
 $params->setBuyer($buyer);
@@ -62,26 +67,26 @@ $params->setBuyer($buyer);
 // Fatura ve kargo adresini aynı şekilde ekle
 $params->setAddress($address);
 
-// Sipariş numarsı ve sipariş tutarını ekle
-$shopier->setOrderData('52003', '1.0');
+// Sipariş numarası ve sipariş tutarını ekle
+$params->setOrderData('52003', '1.0');
 
 // Sipariş edilen ürünü ekle
-$shopier->setProductData('Test Product', ProductType::DOWNLOADABLE_VIRTUAL);
+$params->setProductData('Test Product', ProductType::DOWNLOADABLE_VIRTUAL);
+
 
 try {
 
 
     /**
-     * Otomarik ödeme sayfasına yönlendiren renderer
+     * Otomatik ödeme sayfasına yönlendiren renderer
      *
      * @var AutoSubmitFormRenderer $renderer
      */
-    $renderer = $shopier->createRenderer(AutoSubmitFormRenderer::class);
-
+//    $renderer = $shopier->createRenderer(AutoSubmitFormRenderer::class);
+//    $shopier->goWith($renderer);
 
     /**
-     * Shopier İle Güvenli Öde şeklinde butona tıklanınca 
-     * ödeme sayfasına yönlendirenn renderer
+     * Shopier İle Güvenli Öde şeklinde butona tıklanınca ödeme sayfasına yönlendiren renderer
      *
      * @var ButtonRenderer $renderer
      */
@@ -94,18 +99,21 @@ try {
     $shopier->goWith($renderer);
 
 } catch (RequiredParameterException $e) {
-    // Zorunlu parametlerden bir ve daha fazlası eksik
+    // Zorunlu parametrelerden bir ve daha fazlası eksik
 } catch (NotRendererClassException $e) {
-    // $shopier->createRenderer(...) metodunda verilen class adı AbstracRenderer sınıfından türetilmemiş !
+    // $shopier->createRenderer(...) metodunda verilen class adı AbstractRenderer sınıfından türetilmemiş !
 } catch (RendererClassNotFoundException $e) {
     // $shopier->createRenderer(...) metodunda verilen class bulunamadı !
 }
+
+
 ```
 
 # Renderer (Ödeme sayfasına yönlendirme yöntemleri)
 
 Kütüphane içerisinde 2 adet Renderer vardır.
 - ButtonRenderer: Butona tıklanınca ödeme sayfasına gider.
+- AutoSubmitFormRenderer: Direk ödeme sayfasına gider.
 
 
 ![shopier-api-ozel-buton](https://user-images.githubusercontent.com/16518847/56689087-e9a41f00-66e2-11e9-9d92-a602088ab933.png)
@@ -136,7 +144,37 @@ içerisine kendi yönlendirme uygulamanızı yazabilirsiniz.
 Ödeme sonrası dönüş url'nizdeki sayfa içerisinde (callback/return page) aşağıdaki gösterildiği gibi kontrol yapabilirsiniz.
 
 ```php
-$isValidPaymentResponse = $shopier->verifyResponse($response_data);
+<?php
+// example/return_url_page.php
+
+use Shopier\Models\ShopierResponse;
+
+require_once __DIR__ . '/bootstrap.php';
+
+// $_POST içerisinde aşağıdaki şekilde veriler gelir
+//[
+//    'platform_order_id' => '10002',
+//    'API_key' => '*****',
+//    'status' => 'success',
+//    'installment' => '0',
+//    'payment_id' => '954344654',
+//    'random_nr' => '123456',
+//    'signature' => 'f3EjDlXoPICsKssHT9iv/5ddCXIwk1ZcItlYXDqyYHrNso=',
+//];
+
+$shopierResponse = ShopierResponse::fromPostData();
+
+if (!$shopierResponse->hasValidSignature(getenv('SHOPIER_API_SECRET'))) {
+    //TODO: Ödeme başarılı değil, hata mesajı göster
+    die('Ödemeniz alınamadı');
+}
+
+/*
+ *
+ * TODO: Ödeme başarıyla gerçekleşti. Ödeme sonrası işlemleri uygula
+ *
+ */
+print_r($shopierResponse->toArray());
 ```
 
 ```
@@ -215,6 +253,6 @@ WebsiteIndex::SITE_5
 
 # Support (Destek)
 
-İletişim için [tıklayınız](https://erkin.net).
+Entegrasyon talepleriniz için [tıklayınız](https://wa.me/908503023601?text=Shopier+entegrasyonu+yapt%C4%B1rmak+istiyorum).
 
 Email: [hello@erkin.net](mailto:hello@erkin.net)

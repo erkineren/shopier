@@ -6,35 +6,37 @@ namespace Shopier;
 
 use Shopier\Exceptions\NotRendererClassException;
 use Shopier\Exceptions\RendererClassNotFoundException;
+use Shopier\Exceptions\RequiredParameterException;
 use Shopier\Models\ShopierParams;
+use Shopier\Models\ShopierResponse;
 use Shopier\Renderers\AbstractRenderer;
 
 /**
  * Class Shopier
  * @package Shopier
  *
- * Shopier Payment API gataway main class
+ * Shopier Payment API gateway main class
  */
 class Shopier
 {
     /** @var string */
     protected $payment_url = 'https://www.shopier.com/ShowProduct/api_pay4.php';
+
     /** @var ShopierParams */
     protected $params;
+
     /** @var @var string */
     private $api_key;
+
     /** @var string */
     private $api_secret;
 
     public function __construct($api_key, $api_secret, ShopierParams $shopierParams = null)
     {
-        $this->api_key = $api_key;
-        $this->api_secret = $api_secret;
-
-        if ($shopierParams) $this->params = $shopierParams;
-        else $this->params = new ShopierParams();
-
-        $this->params->API_key = $api_key;
+        $this->setApiKey($api_key);
+        $this->setApiSecret($api_secret);
+        $this->setParams($shopierParams ? $shopierParams : new ShopierParams());
+        $this->params->setAPIKey($api_key);
     }
 
     /**
@@ -85,55 +87,54 @@ class Shopier
         $this->api_secret = $api_secret;
     }
 
+    /**
+     * @param $platform_order_id
+     * @param $total_order_value
+     * @param null $callback
+     * @return Shopier
+     * @deprecated use Shopier\Models\ShopierParams::setOrderData
+     */
     public function setOrderData($platform_order_id, $total_order_value, $callback = null)
     {
-        $this->params->fillValues([
-            'platform_order_id' => $platform_order_id,
-            'total_order_value' => $total_order_value,
-            'callback' => $callback,
-        ]);
-    }
-
-    public function setProductData($product_name, $product_type = null)
-    {
-        $this->params->fillValues([
-            'product_name' => $product_name,
-            'product_type' => $product_type
-        ]);
+        $this->getParams()->setOrderData($platform_order_id, $total_order_value, $callback);
+        return $this;
     }
 
     /**
-     * @param $response_data
-     *
-     * Example Response Data:
-     * <code>
-     * [
-     * 'platform_order_id' => '10002',
-     * 'API_key' => '************',
-     * 'status' => 'success',
-     * 'installment' => '0',
-     * 'payment_id' => '954344654',
-     * 'random_nr' => '123456',
-     * 'signature' => '+e1klzFG7ZABS16xnHcZ8peqbvSZD3Pv9NU4pWiw0qE=',
-     * ]
-     * </code>
-     *
+     * @return ShopierParams
+     */
+    public function getParams()
+    {
+        return $this->params;
+    }
+
+    /**
+     * @param ShopierParams $params
+     */
+    public function setParams($params)
+    {
+        $this->params = $params;
+    }
+
+    /**
+     * @param $product_name
+     * @param null $product_type
+     * @return Shopier
+     * @deprecated use Shopier\Models\ShopierParams::setProductData
+     */
+    public function setProductData($product_name, $product_type = null)
+    {
+        $this->getParams()->setProductData($product_name, $product_type);
+        return $this;
+    }
+
+    /**
+     * @param array $responseData
      * @return bool
      */
-    public function verifyResponse($response_data)
+    public function validateResponse(array $responseData = [])
     {
-        if (isset($response_data['platform_order_id']) && isset($response_data['random_nr']) && $response_data["signature"]) {
-            $order_id = $response_data['platform_order_id'];
-            $random_nr = $response_data['random_nr'];
-            $signature = base64_decode($response_data["signature"]);
-
-            if ($order_id && $random_nr && $signature) {
-                $expected = hash_hmac('sha256', $random_nr . $order_id, $this->api_secret, true);
-                if ($signature == $expected)
-                    return true;
-            }
-        }
-        return false;
+        return ShopierResponse::fromArray($responseData ? $responseData : $_POST)->hasValidSignature($this->getApiSecret());
     }
 
     /**
@@ -193,25 +194,9 @@ END;
     {
         $params = $this->getParams();
         $signature = base64_encode(hash_hmac('SHA256', $params->getDataToBeHashed(), $this->api_secret, true));
-        $params->signature = $signature;
+        $params->setSignature($signature);
 
         return $this;
-    }
-
-    /**
-     * @return ShopierParams
-     */
-    public function getParams()
-    {
-        return $this->params;
-    }
-
-    /**
-     * @param ShopierParams $params
-     */
-    public function setParams($params)
-    {
-        $this->params = $params;
     }
 
     /**
@@ -233,7 +218,10 @@ END;
     }
 
     /**
-     * @throws Exceptions\RequiredParameterException
+     * @param AbstractRenderer $renderer
+     * @param bool $return
+     * @param bool $die
+     * @throws RequiredParameterException
      */
     public function goWith(AbstractRenderer $renderer, $return = false, $die = false)
     {
