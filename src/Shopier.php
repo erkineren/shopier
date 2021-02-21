@@ -185,6 +185,7 @@ END;
     {
         $this->calculateSignature();
         $this->params->validate();
+        return $this;
     }
 
     /**
