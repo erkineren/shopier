@@ -6,7 +6,6 @@ namespace Shopier;
 
 use Shopier\Exceptions\NotRendererClassException;
 use Shopier\Exceptions\RendererClassNotFoundException;
-use Shopier\Exceptions\RequiredParameterException;
 use Shopier\Models\ShopierParams;
 use Shopier\Models\ShopierResponse;
 use Shopier\Renderers\AbstractRenderer;
@@ -134,7 +133,8 @@ class Shopier
      */
     public function validateResponse(array $responseData = [])
     {
-        return ShopierResponse::fromArray($responseData ? $responseData : $_POST)->hasValidSignature($this->getApiSecret());
+        return ShopierResponse::fromArray($responseData ? $responseData : $_POST)
+            ->hasValidSignature($this->getApiSecret());
     }
 
     /**
@@ -223,7 +223,6 @@ END;
      * @param bool $return
      * @param bool $die
      * @return string
-     * @throws RequiredParameterException
      */
     public function goWith(AbstractRenderer $renderer, $return = false, $die = false)
     {

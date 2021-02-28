@@ -45,7 +45,7 @@ abstract class BaseModel
 
     /**
      * @param array $properties
-     * @return BaseModel
+     * @return static
      */
     public static function fromArray(array $properties)
     {

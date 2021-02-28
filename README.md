@@ -30,7 +30,8 @@ use Shopier\Exceptions\RequiredParameterException;
 use Shopier\Models\Address;
 use Shopier\Models\Buyer;
 use Shopier\Renderers\AutoSubmitFormRenderer;
-use Shopier\Renderers\ButtonRenderer;
+use Shopier\Renderers\IframeRenderer;
+use Shopier\Renderers\ShopierButtonRenderer;
 use Shopier\Shopier;
 
 require_once __DIR__ . '/bootstrap.php';
@@ -76,24 +77,30 @@ $params->setProductData('Test Product', ProductType::DOWNLOADABLE_VIRTUAL);
 
 try {
 
-
-    /**
-     * Otomatik ödeme sayfasına yönlendiren renderer
-     *
-     * @var AutoSubmitFormRenderer $renderer
-     */
-//    $renderer = $shopier->createRenderer(AutoSubmitFormRenderer::class);
-//    $shopier->goWith($renderer);
-
     /**
      * Shopier İle Güvenli Öde şeklinde butona tıklanınca ödeme sayfasına yönlendiren renderer
-     *
-     * @var ButtonRenderer $renderer
      */
-    $renderer = $shopier->createRenderer(ButtonRenderer::class);
+    $renderer = new ShopierButtonRenderer($shopier);
     $renderer
-        ->withStyle("padding:15px; color: #fff; background-color:#51cbb0; border:1px solid #fff; border-radius:7px")
-        ->withText('Shopier İle Güvenli Öde');
+        ->setName('Shopier ile Güvenli Öde');
+
+    
+    
+    /**
+     * Otomatik ödeme sayfasına yönlendiren renderer
+     */
+    $renderer = new AutoSubmitFormRenderer($shopier);
+    
+    
+    
+    /**
+     * Otomatik ödeme sayfasına iframe olarak yönlendiren renderer
+     */
+    $renderer = new IframeRenderer($shopier);
+    $renderer
+        ->setWidth(600)
+        ->setHeight(750)
+        ->setCenter(true);
 
 
     $shopier->goWith($renderer);
@@ -111,14 +118,60 @@ try {
 
 # Renderer (Ödeme sayfasına yönlendirme yöntemleri)
 
-Kütüphane içerisinde 2 adet Renderer vardır.
-- ButtonRenderer: Butona tıklanınca ödeme sayfasına gider.
-- AutoSubmitFormRenderer: Direk ödeme sayfasına gider.
+Kütüphane içerisinde 3 adet Renderer vardır.
+1. ShopierButtonRenderer: Butona tıklanınca ödeme sayfasına gider. Shopier stilinde buton.
+2. AutoSubmitFormRenderer: Direk ödeme sayfasına gider.
+3. IframeRenderer: Iframe içerisinde direk ödeme sayfasına gider. (Siteden ayrılmadan pop-up yöntemler için)
 
 
-![shopier-api-ozel-buton](https://user-images.githubusercontent.com/16518847/56689087-e9a41f00-66e2-11e9-9d92-a602088ab933.png)
+### ShopierButtonRenderer: Butona tıklanınca ödeme sayfasına gider. Shopier stilinde buton.
 
 ```php
+use Shopier\Renderers\ShopierButtonRenderer;
+
+$renderer = new ShopierButtonRenderer($shopier);
+$renderer
+    ->setName('Shopier ile Güvenli Öde');
+
+$shopier->goWith($renderer);
+```
+![shopier-api-ozel-buton](https://user-images.githubusercontent.com/16518847/56689087-e9a41f00-66e2-11e9-9d92-a602088ab933.png)
+
+
+### AutoSubmitFormRenderer: Sayfa açıldığı gibi direk ödeme sayfasına gider.
+
+```php
+
+use Shopier\Renderers\AutoSubmitFormRenderer;
+
+$renderer = new AutoSubmitFormRenderer($shopier);
+
+$shopier->goWith($renderer);
+```
+
+### IframeRenderer: Sayfa açıldığı gibi ödeme sayfasına gider.
+
+```php
+
+use Shopier\Renderers\IframeRenderer;
+
+$renderer = new IframeRenderer($shopier);
+    $renderer
+        ->setWidth(600)
+        ->setHeight(750)
+        ->setCenter(true);
+
+$shopier->goWith($renderer);
+```
+
+# Custom Renderer (Özel Yönlendirme Şekli Ekleme)
+- Kendi rendererlarınızı oluşturmak için `AbstractRenderer` sınıfından yeni bir sınıf türeterek `render` metodu 
+içerisine kendi yönlendirme uygulamanızı yazabilirsiniz veya `ButtonRenderer` sınıfını kullanarak kendi 
+  butonlarınızı tasarlayabilirsiniz.
+
+```php
+use Shopier\Renderers\ButtonRenderer;
+
 $renderer = $shopier->createRenderer(ButtonRenderer::class);
 $renderer
     ->withStyle("padding:15px; color: #fff; background-color:#51cbb0; border:1px solid #fff; border-radius:7px")
@@ -126,18 +179,6 @@ $renderer
 
 $shopier->goWith($renderer);
 ```
-
-
-- AutoSubmitFormRenderer: Sayfa açıldığı gibi ödeme sayfasına gider.
-```php
-$renderer = $shopier->createRenderer(AutoSubmitFormRenderer::class);
-
-$shopier->goWith($renderer);
-```
-
-# Custom Renderer (Özel Yönlendirme Şekli Ekleme)
-- Kendi rendererlarınızı oluşturmak için ``AbstractRenderer`` sınıfından yeni bir sınıf türeterek ``render`` metodu 
-içerisine kendi yönlendirme uygulamanızı yazabilirsiniz.
 
 
 # Verify Payment Response (Ödeme Sayfasından Dönen Verileri Kontrol Etme)
@@ -165,13 +206,13 @@ require_once __DIR__ . '/bootstrap.php';
 $shopierResponse = ShopierResponse::fromPostData();
 
 if (!$shopierResponse->hasValidSignature(getenv('SHOPIER_API_SECRET'))) {
-    //TODO: Ödeme başarılı değil, hata mesajı göster
+    // TODO: Ödeme başarılı değil, hata mesajı göster
     die('Ödemeniz alınamadı');
 }
 
 /*
  *
- * TODO: Ödeme başarıyla gerçekleşti. Ödeme sonrası işlemleri uygula
+ * Ödeme başarıyla gerçekleşti. Ödeme sonrası işlemleri uygula
  *
  */
 print_r($shopierResponse->toArray());

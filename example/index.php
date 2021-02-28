@@ -1,5 +1,7 @@
 <?php
 
+// example/index.php
+
 use Shopier\Enums\ProductType;
 use Shopier\Enums\WebsiteIndex;
 use Shopier\Exceptions\NotRendererClassException;
@@ -8,7 +10,8 @@ use Shopier\Exceptions\RequiredParameterException;
 use Shopier\Models\Address;
 use Shopier\Models\Buyer;
 use Shopier\Renderers\AutoSubmitFormRenderer;
-use Shopier\Renderers\ButtonRenderer;
+use Shopier\Renderers\IframeRenderer;
+use Shopier\Renderers\ShopierButtonRenderer;
 use Shopier\Shopier;
 
 require_once __DIR__ . '/bootstrap.php';
@@ -54,24 +57,30 @@ $params->setProductData('Test Product', ProductType::DOWNLOADABLE_VIRTUAL);
 
 try {
 
+    /**
+     * Shopier İle Güvenli Öde şeklinde butona tıklanınca ödeme sayfasına yönlendiren renderer
+     */
+    $renderer = new ShopierButtonRenderer($shopier);
+    $renderer
+        ->setName('Shopier ile Güvenli Öde');
+
+
 
     /**
      * Otomatik ödeme sayfasına yönlendiren renderer
-     *
-     * @var AutoSubmitFormRenderer $renderer
      */
-//    $renderer = $shopier->createRenderer(AutoSubmitFormRenderer::class);
-//    $shopier->goWith($renderer);
+    $renderer = new AutoSubmitFormRenderer($shopier);
+
+
 
     /**
-     * Shopier İle Güvenli Öde şeklinde butona tıklanınca ödeme sayfasına yönlendiren renderer
-     *
-     * @var ButtonRenderer $renderer
+     * Otomatik ödeme sayfasına iframe olarak yönlendiren renderer
      */
-    $renderer = $shopier->createRenderer(ButtonRenderer::class);
+    $renderer = new IframeRenderer($shopier);
     $renderer
-        ->withStyle("padding:15px; color: #fff; background-color:#51cbb0; border:1px solid #fff; border-radius:7px")
-        ->withText('Shopier İle Güvenli Öde');
+        ->setWidth(600)
+        ->setHeight(750)
+        ->setCenter(true);
 
 
     $shopier->goWith($renderer);
