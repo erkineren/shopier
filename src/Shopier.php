@@ -15,6 +15,7 @@ use Shopier\Renderers\AbstractRenderer;
  * @package Shopier
  *
  * Shopier Payment API gateway main class
+ * 
  */
 class Shopier
 {
