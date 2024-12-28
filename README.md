@@ -33,14 +33,14 @@ use Shopier\Shopier;
 
 require_once __DIR__ . '/bootstrap.php';
 
-$shopier = new Shopier(getenv('SHOPIER_API_KEY'), getenv('SHOPIER_API_SECRET'));
+$shopier = new Shopier($_ENV['SHOPIER_API_KEY'], $_ENV['SHOPIER_API_SECRET']);
 
 // Satın alan kişi bilgileri
 $buyer = new Buyer([
     'id' => 101,
     'name' => 'Erkin',
     'surname' => 'Eren',
-    'email' => 'eren@erkin.net',
+    'email' => 'hello@erkin.net',
     'phone' => '8503023601'
 ]);
 
@@ -66,10 +66,10 @@ $params->setBuyer($buyer);
 $params->setAddress($address);
 
 // Sipariş numarası ve sipariş tutarını ekle
-$params->setOrderData('52003', '1.0');
+$params->setOrderData('52003', '10.0');
 
 // Sipariş edilen ürünü ekle
-$params->setProductData('Test Product', ProductType::DOWNLOADABLE_VIRTUAL);
+$params->setProductData('Test Ürün', ProductType::DOWNLOADABLE_VIRTUAL);
 
 
 try {
@@ -104,10 +104,13 @@ try {
 
 } catch (RequiredParameterException $e) {
     // Zorunlu parametrelerden bir ve daha fazlası eksik
+    echo $e->getMessage();
 } catch (NotRendererClassException $e) {
     // $shopier->createRenderer(...) metodunda verilen class adı AbstractRenderer sınıfından türetilmemiş !
+    echo $e->getMessage();
 } catch (RendererClassNotFoundException $e) {
     // $shopier->createRenderer(...) metodunda verilen class bulunamadı !
+    echo $e->getMessage();
 }
 
 
