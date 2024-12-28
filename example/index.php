@@ -65,12 +65,10 @@ try {
         ->setName('Shopier ile Güvenli Öde');
 
 
-
     /**
      * Otomatik ödeme sayfasına yönlendiren renderer
      */
     $renderer = new AutoSubmitFormRenderer($shopier);
-
 
 
     /**

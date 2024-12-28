@@ -8,7 +8,7 @@ assignees: ''
 ---
 
 ** Özellik isteğiniz bir sorunla mı ilgili? Lütfen tanımla.**
-Sorunun ne olduğu konusunda net ve kısa bir açıklama. 
+Sorunun ne olduğu konusunda net ve kısa bir açıklama.
 
 ** İstediğiniz çözümü açıklayın **
 Ne olmasını istediğinin net ve öz açıklaması.

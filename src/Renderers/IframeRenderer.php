@@ -101,6 +101,6 @@ END;
         $this->center = $center;
         return $this;
     }
-    
-    
+
+
 }

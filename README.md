@@ -4,10 +4,7 @@ Yazdığınız özel yazılımlarınıza **Shopier ile Ödeme Alma** metodu ekle
 
 Shopier Api Entegrasyonu ile çok kolay bir şekilde entegrasyon sağlayın.
 
-
 ![shopier-api](https://user-images.githubusercontent.com/16518847/56689086-e90b8880-66e2-11e9-92a6-45dccfd410db.png)
-
-
 
 # Installation (Kurulum)
 
@@ -119,10 +116,10 @@ try {
 # Renderer (Ödeme sayfasına yönlendirme yöntemleri)
 
 Kütüphane içerisinde 3 adet Renderer vardır.
+
 1. ShopierButtonRenderer: Butona tıklanınca ödeme sayfasına gider. Shopier stilinde buton.
 2. AutoSubmitFormRenderer: Direk ödeme sayfasına gider.
 3. IframeRenderer: Iframe içerisinde direk ödeme sayfasına gider. (Siteden ayrılmadan pop-up yöntemler için)
-
 
 ### ShopierButtonRenderer: Butona tıklanınca ödeme sayfasına gider. Shopier stilinde buton.
 
@@ -135,8 +132,8 @@ $renderer
 
 $shopier->goWith($renderer);
 ```
-![shopier-api-ozel-buton](https://user-images.githubusercontent.com/16518847/56689087-e9a41f00-66e2-11e9-9d92-a602088ab933.png)
 
+![shopier-api-ozel-buton](https://user-images.githubusercontent.com/16518847/56689087-e9a41f00-66e2-11e9-9d92-a602088ab933.png)
 
 ### AutoSubmitFormRenderer: Sayfa açıldığı gibi direk ödeme sayfasına gider.
 
@@ -165,8 +162,9 @@ $shopier->goWith($renderer);
 ```
 
 # Custom Renderer (Özel Yönlendirme Şekli Ekleme)
-- Kendi rendererlarınızı oluşturmak için `AbstractRenderer` sınıfından yeni bir sınıf türeterek `render` metodu 
-içerisine kendi yönlendirme uygulamanızı yazabilirsiniz veya `ButtonRenderer` sınıfını kullanarak kendi 
+
+- Kendi rendererlarınızı oluşturmak için `AbstractRenderer` sınıfından yeni bir sınıf türeterek `render` metodu
+  içerisine kendi yönlendirme uygulamanızı yazabilirsiniz veya `ButtonRenderer` sınıfını kullanarak kendi
   butonlarınızı tasarlayabilirsiniz.
 
 ```php
@@ -180,9 +178,10 @@ $renderer
 $shopier->goWith($renderer);
 ```
 
-
 # Verify Payment Response (Ödeme Sayfasından Dönen Verileri Kontrol Etme)
-Ödeme sonrası dönüş url'nizdeki sayfa içerisinde (callback/return page) aşağıdaki gösterildiği gibi kontrol yapabilirsiniz.
+
+Ödeme sonrası dönüş url'nizdeki sayfa içerisinde (callback/return page) aşağıdaki gösterildiği gibi kontrol
+yapabilirsiniz.
 
 ```php
 <?php
@@ -234,6 +233,7 @@ Array
 ```
 
 # Parameter Initialize Methods (Parametre Ekleme Yöntemleri)
+
 ``ShopierParams``, ``Buyer`` ve ``Address`` sınıfları ``BaseModel`` sınıfında türemektedir.
 ``ShippingAddress`` ve ``BillingAddress`` sınıfları ``Address`` sınıfından türemektedir.
 
@@ -259,26 +259,34 @@ public function toJson()
 ```
 
 # Enums
+
 Kütüphane içerisinde 4 adet enum sınıf bulunmaktadır.
 
 - Curreny
+
 ```php
 Currency::TL
 Currency::USD
 Currency::EUR
 ```
+
 - Language
+
 ```php
 Language::TR
 Language::EN
 ```
+
 - ProductType
+
 ```php
 ProductType::REAL
 ProductType::DOWNLOADABLE_VIRTUAL
 ProductType::DEFAULT_TYPE
 ```
+
 - WebsiteIndex
+
 ```php
 WebsiteIndex::SITE_1
 WebsiteIndex::SITE_2
@@ -288,12 +296,14 @@ WebsiteIndex::SITE_5
 ```
 
 # Exceptions
+
 - NotRendererClassException: ``createRender()`` metodu içerisinde gönderilen sınıf AbstractRenderer sınıfından türememiş
 - RendererClassNotFoundException: `createRender()`` metodu içerisinde gönderilen sınıf bulunamadı
-- RequiredParameterException: ``ShopierParams`` sınıfındaki zorunlu propertylerden  bir veya birkaçı boş
+- RequiredParameterException: ``ShopierParams`` sınıfındaki zorunlu propertylerden bir veya birkaçı boş
 
 # Support (Destek)
 
-Entegrasyon talepleriniz için [tıklayınız](https://wa.me/908503023601?text=Shopier+entegrasyonu+yapt%C4%B1rmak+istiyorum).
+Entegrasyon talepleriniz
+için [tıklayınız](https://wa.me/908503023601?text=Shopier+entegrasyonu+yapt%C4%B1rmak+istiyorum).
 
 Email: [hello@erkin.net](mailto:hello@erkin.net)
