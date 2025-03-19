@@ -7,7 +7,6 @@ use Shopier\Enums\Language;
 use Shopier\Enums\ProductType;
 use Shopier\Enums\WebsiteIndex;
 
-
 class ShopierParams extends BaseModel
 {
     protected static $requirement = [
@@ -189,7 +188,9 @@ class ShopierParams extends BaseModel
         $this->billing_postcode = $address->postcode;
 
 
-        if ($setAlsoShippingAddress) $this->setShippingAddress($address);
+        if ($setAlsoShippingAddress) {
+            $this->setShippingAddress($address);
+        }
 
         return $this;
     }
@@ -206,7 +207,9 @@ class ShopierParams extends BaseModel
         $this->shipping_country = $address->country;
         $this->shipping_postcode = $address->postcode;
 
-        if ($setAlsoBillingAddress) $this->setBillingAddress($address);
+        if ($setAlsoBillingAddress) {
+            $this->setBillingAddress($address);
+        }
 
         return $this;
     }
@@ -714,5 +717,4 @@ class ShopierParams extends BaseModel
         $this->callback = $callback;
         return $this;
     }
-
 }

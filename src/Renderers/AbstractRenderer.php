@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Shopier\Renderers;
-
 
 use Shopier\Models\ShopierParams;
 use Shopier\Shopier;
@@ -36,13 +34,16 @@ abstract class AbstractRenderer
     }
 
 
-    public abstract function render();
+    abstract public function render();
 
     public function output($return = false, $exit = false)
     {
-        if (!$return)
+        if (!$return) {
             echo $this->data;
-        if ($exit) exit();
+        }
+        if ($exit) {
+            exit();
+        }
         return $this->data;
     }
 }

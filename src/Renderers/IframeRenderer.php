@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Shopier\Renderers;
-
 
 class IframeRenderer extends FormRenderer
 {
@@ -101,6 +99,4 @@ END;
         $this->center = $center;
         return $this;
     }
-
-
 }

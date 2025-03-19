@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Shopier;
-
 
 use Shopier\Exceptions\NotRendererClassException;
 use Shopier\Exceptions\RendererClassNotFoundException;
@@ -209,12 +207,14 @@ END;
      */
     public function createRenderer($rendererClass)
     {
-        if (!class_exists($rendererClass))
+        if (!class_exists($rendererClass)) {
             throw new RendererClassNotFoundException("Renderer class not found: $rendererClass");
+        }
         /** @var AbstractRenderer $renderer */
         $renderer = new $rendererClass($this);
-        if (!($renderer instanceof AbstractRenderer))
+        if (!($renderer instanceof AbstractRenderer)) {
             throw new NotRendererClassException("This class is not renderer: $rendererClass");
+        }
 
         return $renderer;
     }
@@ -230,5 +230,4 @@ END;
         $renderer->render();
         return $renderer->output($return, $die);
     }
-
 }

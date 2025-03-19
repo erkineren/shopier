@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Shopier\Models;
-
 
 use Shopier\Exceptions\RequiredParameterException;
 
@@ -152,6 +150,4 @@ class ShopierResponse extends BaseModel
 
         return $this->getDecodedSignature() === $this->getExpectedSignature($apiSecret);
     }
-
-
 }

@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Shopier\Models;
-
 
 class Buyer extends BaseModel
 {
@@ -27,6 +25,4 @@ class Buyer extends BaseModel
     public $phone;
     /** @var int */
     public $account_age = 0;
-
-
 }

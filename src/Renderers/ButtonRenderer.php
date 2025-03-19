@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Shopier\Renderers;
-
 
 class ButtonRenderer extends FormRenderer
 {
@@ -61,6 +59,4 @@ END;
         $this->form_end = $button;
         parent::render();
     }
-
-
 }

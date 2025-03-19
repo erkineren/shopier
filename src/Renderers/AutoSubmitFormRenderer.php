@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Shopier\Renderers;
-
 
 class AutoSubmitFormRenderer extends FormRenderer
 {
@@ -16,5 +14,4 @@ END;
 
         parent::render();
     }
-
 }

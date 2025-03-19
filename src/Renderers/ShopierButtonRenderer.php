@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Shopier\Renderers;
-
 
 use Shopier\Shopier;
 

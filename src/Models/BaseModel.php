@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Shopier\Models;
-
 
 use Shopier\Exceptions\RequiredParameterException;
 
@@ -28,7 +26,9 @@ abstract class BaseModel
     {
         foreach ($properties as $property => $value) {
             if (property_exists($this, $property)) {
-                if ($ignoreNull && $value === null) continue;
+                if ($ignoreNull && $value === null) {
+                    continue;
+                }
                 $this->{$property} = $value;
             }
         }

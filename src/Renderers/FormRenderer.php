@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Shopier\Renderers;
-
 
 use Shopier\Exceptions\RequiredParameterException;
 
@@ -36,5 +34,4 @@ END;
 </form>
 END;
     }
-
 }
