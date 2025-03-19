@@ -1,3 +1,37 @@
+# IDE specific files
 .idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+*.code-workspace
+
+# Composer files
 vendor/
+composer.phar
+
+# Environment files
 .env
+.env.*
+!.env.example
+
+# PHP CS Fixer
+.php_cs.cache
+.php-cs-fixer.cache
+
+# PHPUnit
+.phpunit.result.cache
+phpunit.xml
+
+# PHPStan
+phpstan.neon
+
+# Cache and logs
+*.log
+*.cache
+var/
+log/
+logs/
+
+# OS specific files
+.DS_Store
+Thumbs.db

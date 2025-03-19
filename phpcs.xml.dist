@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<ruleset name="Shopier Coding Standard">
+    <description>Shopier Coding Standard</description>
+
+    <!-- Display progress -->
+    <arg value="p"/>
+    <!-- Use colors in output -->
+    <arg name="colors"/>
+    <!-- Show sniff names -->
+    <arg value="s"/>
+
+    <!-- Use PSR-12 -->
+    <rule ref="PSR12"/>
+
+    <!-- Check PHP files only -->
+    <arg name="extensions" value="php"/>
+
+    <!-- Directories to check -->
+    <file>src</file>
+    <file>tests</file>
+
+    <!-- Exclude vendor directory -->
+    <exclude-pattern>*/vendor/*</exclude-pattern>
+</ruleset> 
