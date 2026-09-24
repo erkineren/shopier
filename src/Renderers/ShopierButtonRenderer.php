@@ -21,10 +21,12 @@ class ShopierButtonRenderer extends ButtonRenderer
     }
 
     /**
-     * @param mixed $name
+     * @param string $name
+     * @return $this
      */
     public function setName($name)
     {
         $this->name = $name;
+        return $this->withText($name);
     }
 }

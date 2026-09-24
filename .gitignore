@@ -8,6 +8,7 @@
 # Composer files
 vendor/
 composer.phar
+composer.lock
 
 # Environment files
 .env

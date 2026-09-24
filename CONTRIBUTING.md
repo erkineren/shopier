@@ -42,8 +42,8 @@ git clone https://github.com/YOUR_USERNAME/shopier.git
 # Install dependencies
 composer install
 
-# Run tests (once implemented)
-composer test
+# Run tests and coding style checks
+composer check
 ```
 
 ## Coding Standards

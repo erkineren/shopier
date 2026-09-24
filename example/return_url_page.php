@@ -17,7 +17,7 @@ require_once __DIR__ . '/bootstrap.php';
 
 $shopierResponse = ShopierResponse::fromPostData();
 
-if (!$shopierResponse->hasValidSignature(getenv('SHOPIER_API_SECRET'))) {
+if (!$shopierResponse->hasValidSignature($_ENV['SHOPIER_API_SECRET'])) {
     //TODO: Ödeme başarılı değil, hata mesajı göster
     die('Ödemeniz alınamadı');
 }

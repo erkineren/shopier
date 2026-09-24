@@ -36,6 +36,9 @@ class ShopierResponse extends BaseModel
     /** @var string */
     protected $signature;
 
+    /**
+     * @return static
+     */
     public static function fromPostData()
     {
         return new static($_POST);
@@ -115,13 +118,16 @@ class ShopierResponse extends BaseModel
      */
     public function getDecodedSignature()
     {
-        return base64_decode($this->getSignature());
+        return (string)base64_decode((string)$this->getSignature());
     }
 
-
+    /**
+     * @param string $apiSecret
+     * @return string Raw (binary) HMAC-SHA256 signature
+     */
     public function getExpectedSignature($apiSecret)
     {
-        return hash_hmac('sha256', $this->getRandomNr() . $this->getPlatformOrderId(), $apiSecret, true);
+        return hash_hmac('sha256', $this->getRandomNr() . $this->getPlatformOrderId(), (string)$apiSecret, true);
     }
 
     /**
@@ -148,6 +154,6 @@ class ShopierResponse extends BaseModel
             return false;
         }
 
-        return $this->getDecodedSignature() === $this->getExpectedSignature($apiSecret);
+        return hash_equals($this->getExpectedSignature($apiSecret), $this->getDecodedSignature());
     }
 }

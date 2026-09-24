@@ -130,7 +130,7 @@ class ShopierParams extends BaseModel
      */
     public function __construct(array $values = [])
     {
-        $this->random_nr = rand(100000, 999999);
+        $this->random_nr = random_int(100000, 999999);
         parent::__construct($values);
     }
 
@@ -186,7 +186,6 @@ class ShopierParams extends BaseModel
         $this->billing_city = $address->city;
         $this->billing_country = $address->country;
         $this->billing_postcode = $address->postcode;
-
 
         if ($setAlsoShippingAddress) {
             $this->setShippingAddress($address);

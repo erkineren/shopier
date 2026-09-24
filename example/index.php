@@ -68,17 +68,17 @@ try {
     /**
      * Otomatik ödeme sayfasına yönlendiren renderer
      */
-    $renderer = new AutoSubmitFormRenderer($shopier);
+    //$renderer = new AutoSubmitFormRenderer($shopier);
 
 
     /**
      * Otomatik ödeme sayfasına iframe olarak yönlendiren renderer
      */
-    $renderer = new IframeRenderer($shopier);
-    $renderer
-        ->setWidth(600)
-        ->setHeight(750)
-        ->setCenter(true);
+    //$renderer = new IframeRenderer($shopier);
+    //$renderer
+    //    ->setWidth(600)
+    //    ->setHeight(750)
+    //    ->setCenter(true);
 
 
     $shopier->goWith($renderer);
