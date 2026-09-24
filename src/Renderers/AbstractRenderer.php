@@ -22,7 +22,6 @@ abstract class AbstractRenderer
      */
     protected $data = '';
 
-
     /**
      * AbstractRenderer constructor.
      * @param Shopier $shopier
@@ -33,8 +32,18 @@ abstract class AbstractRenderer
         $this->params = $shopier->getParams();
     }
 
-
     abstract public function render();
+
+    /**
+     * Escapes a value for safe usage inside HTML content or attributes.
+     *
+     * @param mixed $value
+     * @return string
+     */
+    protected static function escape($value)
+    {
+        return htmlspecialchars((string)$value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+    }
 
     public function output($return = false, $exit = false)
     {

@@ -7,7 +7,6 @@ class ButtonRenderer extends FormRenderer
     protected $attributes = [];
     protected $inner_html = '';
 
-
     public function withId($id)
     {
         $this->attributes['id'] = $id;
@@ -48,7 +47,7 @@ class ButtonRenderer extends FormRenderer
     {
         $attributes = [];
         foreach ($this->attributes as $key => $value) {
-            $attributes[] = $key . '="' . $value . '"';
+            $attributes[] = self::escape($key) . '="' . self::escape($value) . '"';
         }
         $attribute_str = implode(' ', $attributes);
 

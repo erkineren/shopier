@@ -3,12 +3,19 @@
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/erkineren/shopier.svg?style=flat-square)](https://packagist.org/packages/erkineren/shopier)
 [![Total Downloads](https://img.shields.io/packagist/dt/erkineren/shopier.svg?style=flat-square)](https://packagist.org/packages/erkineren/shopier)
 [![License](https://img.shields.io/packagist/l/erkineren/shopier.svg?style=flat-square)](https://packagist.org/packages/erkineren/shopier)
+[![PHP CI](https://github.com/erkineren/shopier/actions/workflows/php.yml/badge.svg)](https://github.com/erkineren/shopier/actions/workflows/php.yml)
+[![PHP Version](https://img.shields.io/packagist/php-v/erkineren/shopier.svg?style=flat-square)](https://packagist.org/packages/erkineren/shopier)
 
 A PHP SDK for Shopier Payment Gateway integration. This package allows you to easily integrate Shopier payment services into your PHP applications.
 
 _Türkçe açıklama için aşağıya bakınız._
 
 ![shopier-api](https://user-images.githubusercontent.com/16518847/56689086-e90b8880-66e2-11e9-92a6-45dccfd410db.png)
+
+## Requirements
+
+- PHP 7.2.5 or higher (tested up to PHP 8.5)
+- `ext-json`
 
 ## Installation
 
@@ -190,7 +197,7 @@ require_once __DIR__ . '/bootstrap.php';
 
 $shopierResponse = ShopierResponse::fromPostData();
 
-if (!$shopierResponse->hasValidSignature(getenv('SHOPIER_API_SECRET'))) {
+if (!$shopierResponse->hasValidSignature($_ENV['SHOPIER_API_SECRET'])) {
     // Payment failed
     die('Payment failed');
 }
@@ -215,6 +222,15 @@ Array
     [random_nr] => 528061
     [signature] => +e1klzFG7ZABS16xnHcZ8peqbvSZD3Pv9NU4pWiw0qE=
 )
+```
+
+## Development
+
+```bash
+composer install
+composer test      # run PHPUnit
+composer cs-check  # check PSR-12 coding style
+composer check     # both of the above
 ```
 
 ## Contributing

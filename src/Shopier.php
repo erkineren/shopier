@@ -23,13 +23,13 @@ class Shopier
     /** @var ShopierParams */
     protected $params;
 
-    /** @var @var string */
+    /** @var string */
     private $api_key;
 
     /** @var string */
     private $api_secret;
 
-    public function __construct($api_key, $api_secret, ShopierParams $shopierParams = null)
+    public function __construct($api_key, $api_secret, ?ShopierParams $shopierParams = null)
     {
         $this->setApiKey($api_key);
         $this->setApiSecret($api_secret);
@@ -147,14 +147,18 @@ class Shopier
 
         $inputs = '';
         foreach ($this->params->toArray() as $key => $value) {
+            $key = htmlspecialchars((string)$key, ENT_QUOTES, 'UTF-8');
+            $value = htmlspecialchars((string)$value, ENT_QUOTES, 'UTF-8');
             $inputs .= <<<END
 <input type="hidden" name="$key" value="$value">
 
 END;
         }
 
+        $paymentUrl = htmlspecialchars($this->payment_url, ENT_QUOTES, 'UTF-8');
+
         $form = <<<END
-<form id="shopier_payment_form" method="post" action="{$this->payment_url}">
+<form id="shopier_payment_form" method="post" action="{$paymentUrl}">
 {$inputs}
 </form>
 END;
